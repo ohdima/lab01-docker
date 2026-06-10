@@ -1,0 +1,40 @@
+services:
+  app:
+    container_name: app-ac-576-220239-v13
+    image: ohdima/lab01:stu-220239-v13
+    build:
+      context: .
+      dockerfile: Dockerfile
+    labels:
+      org.bstu.owner: "ohdima"
+      org.bstu.student.slug: "ac-576-220239-v13"
+    environment:
+      PORT: "8080"
+      REDIS_URL: "redis://redis:6379/0"
+      STU_ID: "220239"
+      STU_GROUP: "AC-576"
+      STU_VARIANT: "13"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+    networks:
+      - net-ac-576-220239-v13
+
+  redis:
+    container_name: redis-ac-576-220239-v13
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - data-ac-576-220239-v13:/data
+    networks:
+      - net-ac-576-220239-v13
+
+volumes:
+  data-ac-576-220239-v13:
+    name: data-ac-576-220239-v13
+
+networks:
+  net-ac-576-220239-v13:
+    name: net-ac-576-220239-v13
+    driver: bridge
