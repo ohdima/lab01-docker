@@ -1,0 +1,47 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: backup-ac-576-220239-v13
+  namespace: state-ac-576-220239-v13
+
+spec:
+  schedule: "30 1 * * *"
+
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+
+          containers:
+            - name: postgres-backup
+
+              image: postgres:16
+
+              env:
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgres-secret
+                      key: POSTGRES_PASSWORD
+
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  pg_dump \
+                  -h db-ac-576-220239-v13-0.db-ac-576-220239-v13.state-ac-576-220239-v13.svc.cluster.local \
+                  -U postgres \
+                  -d studentdb \
+                  > /backup/backup.sql
+
+                  echo "Backup completed"
+
+              volumeMounts:
+                - name: backup-storage
+                  mountPath: /backup
+
+          volumes:
+            - name: backup-storage
+              persistentVolumeClaim:
+                claimName: backup-ac-576-220239-v13

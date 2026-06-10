@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: state-ac-576-220239-v13
+  labels:
+    org.bstu.owner: ohdima
+    org.bstu.course: rsiot
+    org.bstu.group: ac-576
+    org.bstu.student.id: "220239"
+    org.bstu.variant: "13"
+    org.bstu.student.slug: ac-576-220239-v13
+  annotations:
+    org.bstu.student.fullname: "Муратов Дмитрий Владимирович"

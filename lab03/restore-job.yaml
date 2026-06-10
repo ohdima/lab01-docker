@@ -1,0 +1,43 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: restore-ac-576-220239-v13
+  namespace: state-ac-576-220239-v13
+
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+
+      containers:
+        - name: postgres-restore
+
+          image: postgres:16
+
+          env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+
+          command:
+            - /bin/sh
+            - -c
+            - |
+              psql \
+              -h db-ac-576-220239-v13-0.db-ac-576-220239-v13.state-ac-576-220239-v13.svc.cluster.local \
+              -U postgres \
+              -d studentdb \
+              < /backup/backup.sql
+
+              echo "Restore completed"
+
+          volumeMounts:
+            - name: backup-storage
+              mountPath: /backup
+
+      volumes:
+        - name: backup-storage
+          persistentVolumeClaim:
+            claimName: backup-ac-576-220239-v13
