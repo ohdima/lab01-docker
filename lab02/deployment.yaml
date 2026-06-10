@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app13
+  namespace: web13
+  labels:
+    app: app13
+    org.bstu.owner: ohdima
+    org.bstu.student.slug: ac-576-220239-v13
+    org.bstu.student.id: "220239"
+    org.bstu.group: ac-576
+    org.bstu.variant: "13"
+    org.bstu.course: rsiot
+  annotations:
+    org.bstu.student.fullname: "Муратов Дмитрий Владимирович"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app13
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: app13
+        org.bstu.owner: ohdima
+        org.bstu.student.slug: ac-576-220239-v13
+    spec:
+      containers:
+        - name: app13
+          image: ohdima/lab01:stu-220239-v13
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: app13-config
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /live
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: "150m"
+              memory: "128Mi"
+            limits:
+              cpu: "300m"
+              memory: "256Mi"

@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app13
+  namespace: web13
+  labels:
+    app: app13
+    org.bstu.owner: ohdima
+    org.bstu.student.slug: ac-576-220239-v13
+  annotations:
+    kubernetes.io/ingress.class: nginx
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: app13.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: app13
+                port:
+                  number: 8061

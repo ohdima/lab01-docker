@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: app13
+  namespace: web13
+  labels:
+    app: app13
+    org.bstu.owner: ohdima
+    org.bstu.student.slug: ac-576-220239-v13
+spec:
+  type: ClusterIP
+  selector:
+    app: app13
+  ports:
+    - name: http
+      port: 8061
+      targetPort: 8080

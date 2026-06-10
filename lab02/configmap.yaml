@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app13-config
+  namespace: web13
+  labels:
+    org.bstu.owner: ohdima
+    org.bstu.student.slug: ac-576-220239-v13
+data:
+  PORT: "8080"
+  STU_ID: "220239"
+  STU_GROUP: "AC-576"
+  STU_VARIANT: "13"
