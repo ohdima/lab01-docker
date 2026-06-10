@@ -1,0 +1,51 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: app13-rules
+  namespace: monitoring
+  labels:
+    release: monitoring
+
+spec:
+  groups:
+    - name: app13.rules
+
+      rules:
+
+        - alert: App13HighErrorRate
+
+          expr: |
+            (
+              sum(rate(web13_http_requests_total{status=~"5.."}[10m]))
+              /
+              sum(rate(web13_http_requests_total[10m]))
+            ) > 0.02
+
+          for: 2m
+
+          labels:
+            severity: warning
+
+          annotations:
+            summary: High error rate
+            description: 5xx responses exceed 2 percent during last 10 minutes
+
+        - alert: App13HighLatency
+
+          expr: |
+            histogram_quantile(
+              0.95,
+              sum(
+                rate(web13_http_request_duration_seconds_bucket[5m])
+              ) by (le)
+            ) > 0.33
+
+          for: 2m
+
+          labels:
+            severity: warning
+
+          annotations:
+            summary: High latency
+            description: P95 latency exceeds 330 ms

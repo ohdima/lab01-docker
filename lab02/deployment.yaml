@@ -33,7 +33,7 @@ spec:
       containers:
         - name: app13
           image: ohdima/lab01:stu-220239-v13
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           envFrom:
